@@ -2,14 +2,15 @@
 
 import { useState, type ReactNode } from "react"
 import Image from "next/image"
-import type { Project } from "@/lib/data"
 import ImageModal from "@/components/image-modal"
+import { useLanguage } from "@/contexts/language-context"
+import { translations, type Project } from "@/lib/translations"
 
 interface ProjectCardProps {
   project: Project
 }
 
-function formatDescription(description: string): ReactNode {
+function formatDescription(description: string, t: any): ReactNode {
   // Match markdown-style links: [text](url)
   const linkRegex = /\[([^\]]+)\]$$([^)]+)$$/g
 
@@ -51,6 +52,8 @@ function formatDescription(description: string): ReactNode {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { language } = useLanguage()
+  const t = translations[language]
 
   const renderMedia = () => {
     if (!project.media) return null
@@ -89,7 +92,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <div className="flex flex-col md:flex-row">
         <div className="flex-1 p-6">
           <h4 className="mb-2 text-lg font-bold">{project.title}</h4>
-          <p className="text-card-foreground">{formatDescription(project.description)}</p>
+          <p className="text-card-foreground">{formatDescription(project.description, t)}</p>
           {project.technologies && (
             <div className="mt-4">
               <div className="flex flex-wrap gap-2">

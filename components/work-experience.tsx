@@ -4,7 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import ProjectCard from "@/components/project-card"
-import type { WorkExperience as WorkExperienceType } from "@/lib/data"
+import { useLanguage } from "@/contexts/language-context"
+import { translations, type WorkExperience as WorkExperienceType } from "@/lib/translations"
 
 interface WorkExperienceProps {
   experience: WorkExperienceType
@@ -12,6 +13,8 @@ interface WorkExperienceProps {
 
 export default function WorkExperience({ experience }: WorkExperienceProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const { language } = useLanguage()
+  const t = translations[language]
 
   return (
     <div className="overflow-hidden rounded-lg border bg-card shadow-sm">
@@ -34,7 +37,7 @@ export default function WorkExperience({ experience }: WorkExperienceProps) {
           <h3 className="text-xl font-bold">{experience.title}</h3>
           <p className="text-lg text-muted-foreground">{experience.company}</p>
           <p className="text-sm text-muted-foreground">
-            {experience.startDate} - {experience.endDate || "Present"}
+            {experience.startDate} - {experience.endDate || t.present}
           </p>
         </div>
       </div>
@@ -50,7 +53,9 @@ export default function WorkExperience({ experience }: WorkExperienceProps) {
               onClick={() => setIsExpanded(!isExpanded)}
               className="flex w-full items-center justify-between text-left font-medium"
             >
-              <span>Projects ({experience.projects.length})</span>
+              <span>
+                {t.projects} ({experience.projects.length})
+              </span>
               {isExpanded ? (
                 <ChevronUp className="h-5 w-5 text-muted-foreground" />
               ) : (
